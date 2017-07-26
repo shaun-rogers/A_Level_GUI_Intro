@@ -15,16 +15,16 @@ import tkinter as tk
 root = tk.Tk()
 
 # Create your first label
-myFirstLabel = tk.Label(root, text = "Creating my firts label")
-myFirstLabel.pack)
+myFirstLabel = tk.Label(root, text="Creating my first label")
+myFirstLabel.pack()
 
 # Create your first text entry widget
 myFirstEntry = tk.Entry(root)
 myFirstEntry.pack()
 
 # Create your first button
-myFirstButton = tk.Button(root, text = "Submit")
+myFirstButton = tk.Button(root, text="Submit")
+myFirstButton.pack()
 
-# This method intiates the loop that allows the GUI to actually run
+# This method initiates the loop that allows the GUI to actually run
 root.mainloop()
-
