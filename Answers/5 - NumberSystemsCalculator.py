@@ -9,29 +9,39 @@ to a number system of their choice
 # This line imports the class "tkinter" and all of its methods
 # The "as tk" is a common approach to make calling methods faster
 import tkinter as tk
+import string
 
 '''This first section contains the functions
 that make the program convert the different number systems'''
 
 
 def hex_dec():
-    hex_val = {"1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
+    hex_val = {"0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
     number = baseNumber.get()
     number = number.upper()
-    value = 0
-    index = -1
-    for i in range(len(number)):
-        if len(number)>1:
-            if i == 1:
-                value +=  hex_val[number[index]]
-            else:
-                value += hex_val[number[index]] * (16 * (abs(i-1)))
-        elif len(number)== 1:
-            value += hex_val[number[index]]
-        else:
-            value = "You must enter a number to convert"
-        index -= 1
-    resultText.set("The binary for this number is: " + str(value))
+    #number.rstrip()
+    #number.lstrip()
+    invalidChars = set(string.punctuation)
+    if any(char in invalidChars for char in number):
+        resultText.set("Must only contain Numbers and Letters")
+    else:
+        number_reverse = []
+        position_val = []
+        for i in range(len(number)):
+            number_reverse.append(number[i])
+        number_reverse.reverse()
+
+        for i in range(len(number)):
+            position_val.append(16**i)
+        position_val[0] = 1
+        position_val.reverse()
+        print(position_val)
+
+        value = 0
+
+        for i in range(len(number)):
+            value += hex_val[number_reverse[i]] * position_val[i]
+        resultText.set("The decimal for this number is: " + str(value))
 
 
 def hex_bin():
@@ -39,7 +49,9 @@ def hex_bin():
 
 
 def dec_hex():
-    pass
+    number = baseNumber.get()
+    number = int(number)
+    resultText.set("The hexadecimal of " + str(number) + " is " + str(hex(number))[2:])
 
 
 def dec_bin():
@@ -78,7 +90,7 @@ resultText.set("The result of the calculation will appear here")
 
 hexBinBtn = tk.Button(buttonFrame, text="Hex to Bin", command=hex_bin).grid(row=0,column=0)
 hexDecBtn = tk.Button(buttonFrame, text="Hex to Dec", command=hex_dec).grid(row=0,column=1)
-decHexBtn = tk.Button(buttonFrame, text="Dec to Hex").grid(row=0,column=2)
+decHexBtn = tk.Button(buttonFrame, text="Dec to Hex", command=dec_hex).grid(row=0,column=2)
 decBinBtn = tk.Button(buttonFrame, text="Dec to Bin").grid(row=0,column=3)
 binDecBtn = tk.Button(buttonFrame, text="Bin to Dec").grid(row=1,column=1)
 binHexBtn = tk.Button(buttonFrame, text="Bin to Hex").grid(row=1,column=2)
