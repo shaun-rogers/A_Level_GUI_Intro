@@ -17,20 +17,44 @@ that make the program convert the different number systems'''
 '''This procedure accepts the parameter subProgram which will tell it which conversion function
 to call. These functions will then return a value to outputUpdate and
 set resultText to the appropriate message'''
+
 def outputUpdate(subProgram):
     #Selection block that will run the appropriate function based upon
     #the button the user pushes
+    #It first obtains the entered value in the input box
+    number = baseNumber.get()
     if subProgram == 1:
-        pass
+        value = hex_bin()
+        resultText.set("The binary for this number is: " + str(value)[2:])
     elif subProgram == 2:
         #The function is run within a variable to that the returned
         #value is stored and usable
         value = hex_dec()
-        resultText.set(value)
+        resultText.set("The decimal for this number is: " + str(value))
     elif subProgram == 3:
         value = dec_hex()
+        resultText.set("The decimal for this number is: " + str(value))
+    elif subProgram == 4:
+        value = dec_bin()
+        print(value)
+        resultText.set("The binary value of " + str(number) + " is " + str(value)[2:])
+    elif subProgram == 5:
+        value = bin_dec()
+        resultText.set(value)
+    else:
+        value = bin_hex()
         resultText.set(value)
 
+def hex_bin():
+    #This makes use of the hex_dec function to get the decimal value of the hex number
+    #This means I don't have to re-write code
+    number = hex_dec()
+    binValue = bin(number)
+
+    #Returning the value to the output function
+    return binValue
+
+'''Completed'''
 def hex_dec():
     #Establish a dictionary to store the hex value of each position
     hex_val = {"0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
@@ -71,25 +95,16 @@ def hex_dec():
         value = 0
         #Again, count controlled iteration to add the value of each position to the total
         for i in range(len(number)):
-            value += hex_val[number_reverse[i]] * position_val[i]
+            value += hex_val[number_split[i]] * position_val[i]
         #Concatenating the value into a string that can be presented in the output
-        value = "The decimal for this number is: " + str(value)
+
     #Returning the value to the calling function to be used there
     return value
 
-
-def hex_bin():
-    #This makes use of the hex_dec function to get the decimal value of the hex number
-    #This means I don't have to re-write code
-    decValue = hex_dec()
-    #This is then carried out using the dec_bin function
-    binValue = dec_bin()
-    #Setting the string to be returned and concatenating with the binary value
-    value = "The binary for this number is: " + str(bin_value)
-    #Returning the value to the output function
-    return value
+'''Completed'''
 
 
+'''Completed'''
 def dec_hex():
     #As before this is getting the entered value
     number = baseNumber.get()
@@ -102,17 +117,20 @@ def dec_hex():
     #hex() returns this with a leading 0x
     #I have used string slicing to remove the elements I do not want
     hexConvert = hexConvert[2:]
-    #As with the other functions the output message is being concatenated
-    #and returned to the output procedure
-    value = "The hexadecimal value for " + str(number) + " is " + str(hexConvert)
-    return value
-
+    #As with the other functions this returns the numerical value
+    return hexConvert
+'''Completed Not Commented'''
 def dec_bin():
-    pass
+    number = baseNumber.get()
+    number = bin(int(number))
+    return number
 
-
+'''In Progress'''
 def bin_hex():
-    pass
+    decValue = bin_dec()
+    hexVal = hex(int(decValue))
+    return hexVal
+
 
 
 def bin_dec():
@@ -154,7 +172,7 @@ resultText.set("The result of the calculation will appear here")
 hexBinBtn = tk.Button(buttonFrame, text="Hex to Bin", command= lambda: outputUpdate(1)).grid(row=0,column=0)
 hexDecBtn = tk.Button(buttonFrame, text="Hex to Dec", command= lambda: outputUpdate(2)).grid(row=0,column=1)
 decHexBtn = tk.Button(buttonFrame, text="Dec to Hex", command= lambda: outputUpdate(3)).grid(row=0,column=2)
-decBinBtn = tk.Button(buttonFrame, text="Dec to Bin").grid(row=0,column=3)
+decBinBtn = tk.Button(buttonFrame, text="Dec to Bin", command= lambda: outputUpdate(4)).grid(row=0,column=3)
 binDecBtn = tk.Button(buttonFrame, text="Bin to Dec").grid(row=1,column=1)
 binHexBtn = tk.Button(buttonFrame, text="Bin to Hex", command = bin_hex).grid(row=1,column=2)
 #This initialises the window and keeps it running constantly
