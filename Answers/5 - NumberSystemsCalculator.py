@@ -50,7 +50,7 @@ def hex_dec():
 
         for i in range(len(number)):
             value += hex_val[number_reverse[i]] * position_val[i]
-        value = "The decimal for this number is: " + str(value)
+        value = "The decimal for this number is: " + str(value) 
 
     return value
 
