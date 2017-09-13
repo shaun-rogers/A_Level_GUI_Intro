@@ -59,7 +59,10 @@ def dec_bin():
 
 
 def bin_hex():
-    pass
+    number = int(baseNumber.get())
+    hexConvert = hex(number)
+    hexConvert = hexConvert[2:]
+    resultText.set("The hexadecimal value for " + str(number) + " is " + str(hexConvert))
 
 
 def bin_dec():
@@ -93,6 +96,6 @@ hexDecBtn = tk.Button(buttonFrame, text="Hex to Dec", command=hex_dec).grid(row=
 decHexBtn = tk.Button(buttonFrame, text="Dec to Hex", command=dec_hex).grid(row=0,column=2)
 decBinBtn = tk.Button(buttonFrame, text="Dec to Bin").grid(row=0,column=3)
 binDecBtn = tk.Button(buttonFrame, text="Bin to Dec").grid(row=1,column=1)
-binHexBtn = tk.Button(buttonFrame, text="Bin to Hex").grid(row=1,column=2)
+binHexBtn = tk.Button(buttonFrame, text="Bin to Hex", command = bin_hex).grid(row=1,column=2)
 
 root.mainloop()
