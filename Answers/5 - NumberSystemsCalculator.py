@@ -14,6 +14,15 @@ import string
 '''This first section contains the functions
 that make the program convert the different number systems'''
 
+def outputUpdate(subProgram):
+    if subProgram == 1:
+        pass
+    elif subProgram == 2:
+        value = hex_dec()
+        resultText.set(value)
+    elif subProgram == 3:
+        value = dec_hex()
+        resultText.set(value)
 
 def hex_dec():
     hex_val = {"0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
@@ -41,28 +50,35 @@ def hex_dec():
 
         for i in range(len(number)):
             value += hex_val[number_reverse[i]] * position_val[i]
-        resultText.set("The decimal for this number is: " + str(value))
+        value = "The decimal for this number is: " + str(value)
+
+    return value
 
 
 def hex_bin():
-    pass
+    decValue = hex_dec()
+
+    value = "The decimal for this number is: " + str(dec_value)
+
+    return value
 
 
 def dec_hex():
     number = baseNumber.get()
     number = int(number)
     resultText.set("The hexadecimal of " + str(number) + " is " + str(hex(number))[2:])
-
+    number = int(baseNumber.get())
+    hexConvert = hex(number)
+    hexConvert = hexConvert[2:]
+    value = "The hexadecimal value for " + str(number) + " is " + str(hexConvert)
+    return value
 
 def dec_bin():
     pass
 
 
 def bin_hex():
-    number = int(baseNumber.get())
-    hexConvert = hex(number)
-    hexConvert = hexConvert[2:]
-    resultText.set("The hexadecimal value for " + str(number) + " is " + str(hexConvert))
+    pass
 
 
 def bin_dec():
@@ -91,9 +107,9 @@ resultText = tk.StringVar()
 displayResult = tk.Label(resultFrame, textvariable=resultText).grid(row=0, column=1)
 resultText.set("The result of the calculation will appear here")
 
-hexBinBtn = tk.Button(buttonFrame, text="Hex to Bin", command=hex_bin).grid(row=0,column=0)
-hexDecBtn = tk.Button(buttonFrame, text="Hex to Dec", command=hex_dec).grid(row=0,column=1)
-decHexBtn = tk.Button(buttonFrame, text="Dec to Hex", command=dec_hex).grid(row=0,column=2)
+hexBinBtn = tk.Button(buttonFrame, text="Hex to Bin", command= lambda: outputUpdate(1)).grid(row=0,column=0)
+hexDecBtn = tk.Button(buttonFrame, text="Hex to Dec", command= lambda: outputUpdate(2)).grid(row=0,column=1)
+decHexBtn = tk.Button(buttonFrame, text="Dec to Hex", command= lambda: outputUpdate(3)).grid(row=0,column=2)
 decBinBtn = tk.Button(buttonFrame, text="Dec to Bin").grid(row=0,column=3)
 binDecBtn = tk.Button(buttonFrame, text="Bin to Dec").grid(row=1,column=1)
 binHexBtn = tk.Button(buttonFrame, text="Bin to Hex", command = bin_hex).grid(row=1,column=2)
