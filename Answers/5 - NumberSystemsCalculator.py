@@ -4,6 +4,8 @@ Created: July 2017
 Purpose: Demonstration of how to create a GUI for a simple APP.
 This app allows the user to enter a number in Decimal, Binary or Hex and convert
 to a number system of their choice
+
+To Do: 15/03/17 Error checking still not working on Bin_Dec and Bin_Hex
 '''
 
 # This line imports the class "tkinter" and all of its methods
@@ -11,50 +13,73 @@ to a number system of their choice
 import tkinter as tk
 import string
 
-'''This first section contains the functions
-that make the program convert the different number systems'''
+"""This first section contains the functions
+that make the program convert the different number systems"""
 
-'''This procedure accepts the parameter subProgram which will tell it which conversion function
+"""This procedure accepts the parameter subProgram which will tell it which conversion function
 to call. These functions will then return a value to outputUpdate and
-set resultText to the appropriate message'''
-
+set resultText to the appropriate message"""
 def outputUpdate(subProgram):
     #Selection block that will run the appropriate function based upon
     #the button the user pushes
     #It first obtains the entered value in the input box
     number = baseNumber.get()
     if subProgram == 1:
+        #This validation method has been commented in the first elif of this block
         value = hex_bin()
-        resultText.set("The binary for this number is: " + str(value)[2:])
+        test = value.replace(" ","")
+        if value.isdigit():
+            resultText.set("The binary for this number is: " + str(value)[2:].upper())
+        else:
+            resultText.set(value)
     elif subProgram == 2:
         #The function is run within a variable to that the returned
         #value is stored and usable
         value = hex_dec()
-        resultText.set("The decimal for this number is: " + str(value))
+        #Stripping the returned value of any spaces to allow the isalpha test
+        test = value.replace(" ","")
+        #If the returned value is is text isalpha() will evaluate to True
+        if test.isalpha():
+            #This message will run on isalpha() evaluating to true
+            #as the user had not entered a valid Hex value
+            resultText.set(value)
+        else:
+            resultText.set("The decimal for this number is: " + str(value))
     elif subProgram == 3:
         value = dec_hex()
-        resultText.set("The decimal for this number is: " + str(value))
+        #using the is digit method to see if the returned value is a number.
+        #If the value is a number the user has entered a valid decimal value
+        if value.isdigit():
+            resultText.set("The decimal for this number is: " + str(value).upper())
+        else:
+            #If the user did not enter a valid decimal value
+            #The function will have returned an appropriate error message
+            resultText.set(value)
     elif subProgram == 4:
         value = dec_bin()
-        print(value)
-        resultText.set("The binary value of " + str(number) + " is " + str(value)[2:])
+        test = value.replace(" ","")
+        if test.isalpha():
+            resultText.set(value)
+        else:
+            #string slicing used to remove the leading 0b from the binary value
+            resultText.set("The binary value of " + str(number) + " is " + str(value)[2:])
     elif subProgram == 5:
         value = bin_dec()
-        resultText.set(value)
+        resultText.set("The decimal value of " + str(number) + " is " + str(value))
     else:
         value = bin_hex()
-        resultText.set(value)
+        resultText.set("The hexadecimal value of " + str(number) + " is " + str(value)[2:].upper())
 
+#Completed
 def hex_bin():
     #This makes use of the hex_dec function to get the decimal value of the hex number
     #This means I don't have to re-write code
     number = hex_dec()
-    binValue = bin(number)
-
+    binValue = "Must only enter numbers and letters"
     #Returning the value to the output function
     return binValue
 
-'''Completed'''
+#Completed'''
 def hex_dec():
     #Establish a dictionary to store the hex value of each position
     hex_val = {"0":0, "1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "A":10, "B":11, "C":12, "D":13, "E":14, "F":15}
@@ -68,7 +93,7 @@ def hex_dec():
     invalidChars = set(string.punctuation)
     #Selection statement that outputs an error message should the user enter an invalid value
     if any(char in invalidChars for char in number):
-        resultText.set("Must only contain Numbers and Letters")
+        value = "Must only contain Numbers and Letters"
     else:
         #If the entry is valid the rest of the algorithm runs
         #Establishing a list to hold the entered value in reverse
@@ -102,27 +127,31 @@ def hex_dec():
     return value
 
 '''Completed'''
-
-
-'''Completed'''
 def dec_hex():
     #As before this is getting the entered value
     number = baseNumber.get()
-    '''Here I will build the validation and error checking later'''
 
-    #Converting the input to an integer so that we can use it in calculations
-    number = int(number)
-    #Making use of the inbuilt hex function that returns the hex value of a decimal
-    hexConvert = hex(number)
-    #hex() returns this with a leading 0x
-    #I have used string slicing to remove the elements I do not want
-    hexConvert = hexConvert[2:]
-    #As with the other functions this returns the numerical value
+    if number.isdigit():
+
+        #Converting the input to an integer so that we can use it in calculations
+        number = int(number)
+        #Making use of the inbuilt hex function that returns the hex value of a decimal
+        hexConvert = hex(number)
+        #hex() returns this with a leading 0x
+        #I have used string slicing to remove the elements I do not want
+        hexConvert = hexConvert[2:]
+        #As with the other functions this returns the numerical value
+    else:
+        hexConvert = "Must only enter whole numbers e.g. 1, 10, 14"
     return hexConvert
+
 '''Completed Not Commented'''
 def dec_bin():
     number = baseNumber.get()
-    number = bin(int(number))
+    if number.isdigit():
+        number = bin(int(number))
+    else:
+        number = "Must enter a valid digit"
     return number
 
 '''In Progress'''
@@ -134,13 +163,26 @@ def bin_hex():
 
 
 def bin_dec():
-    pass
+    number = baseNumber.get()
+    value = int(number , 2)
+    return value
 
 #Setting the tk environment to start the GUI
 root = tk.Tk()
 '''I have set up different frames to allow for different grid layouts'''
 #Setting the title that will appear at the top of the window
 root.title("BinHexDec Calculator")
+
+#Establishing the navigation bar to control movement between windows in the application
+navBar = tk.Frame(root, width=400, height=50)
+navBar.pack()
+homeButton = tk.Button(navBar, text="Home", anchor= "w").grid(row=0,column=0,sticky = "W,E")
+numConvertButton = tk.Button(navBar, text="Number Converter").grid(row=0,column=1)
+testButton = tk.Button(navBar,text = "Take a Test").grid(row=0,column=2)
+
+
+
+
 #Creating a frame that will hold the top text of the window
 titleFrame = tk.Frame(root, width=400, height=50)
 titleFrame.pack()
@@ -173,7 +215,7 @@ hexBinBtn = tk.Button(buttonFrame, text="Hex to Bin", command= lambda: outputUpd
 hexDecBtn = tk.Button(buttonFrame, text="Hex to Dec", command= lambda: outputUpdate(2)).grid(row=0,column=1)
 decHexBtn = tk.Button(buttonFrame, text="Dec to Hex", command= lambda: outputUpdate(3)).grid(row=0,column=2)
 decBinBtn = tk.Button(buttonFrame, text="Dec to Bin", command= lambda: outputUpdate(4)).grid(row=0,column=3)
-binDecBtn = tk.Button(buttonFrame, text="Bin to Dec").grid(row=1,column=1)
-binHexBtn = tk.Button(buttonFrame, text="Bin to Hex", command = bin_hex).grid(row=1,column=2)
+binDecBtn = tk.Button(buttonFrame, text="Bin to Dec", command= lambda: outputUpdate(5)).grid(row=1,column=1)
+binHexBtn = tk.Button(buttonFrame, text="Bin to Hex", command = lambda: outputUpdate(6)).grid(row=1,column=2)
 #This initialises the window and keeps it running constantly
 root.mainloop()
