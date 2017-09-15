@@ -27,7 +27,8 @@ def outputUpdate(subProgram):
     number = baseNumber.get()
     if subProgram == 1:
         value = hex_bin()
-        if value != "Must only contain Numbers and Letters":
+        if value != "Must only contain numbers and letters in the Hex set\n" \
+                "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f":
             resultText.set("The binary for this number is: " + str(value)[2:].upper())
         else:
             resultText.set(value)
@@ -36,7 +37,8 @@ def outputUpdate(subProgram):
         #The function is run within a variable to that the returned
         #value is stored and usable
         value = hex_dec()
-        if value != "Must only contain Numbers and Letters":
+        if value != "Must only contain numbers and letters in the Hex set\n" \
+                "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f":
             resultText.set("The decimal for this number is: " + str(value).upper())
         else:
             resultText.set(value)
@@ -120,28 +122,41 @@ def dec_bin():
     number = baseNumber.get()
     #Selection statement testing if the value etered was a digit
     if number.isdigit():
+        #If a digit is entered the conversion is carried out
         number = bin(int(number))
     else:
+        #If the user enters a non-digit, the error message is returned
         number = "Must enter a valid digit"
     return number
 
-'''In Progress'''
+
 def bin_hex():
+    #the bin_dec() function is called to obtain a decimal value for conversion
     decValue = bin_dec()
+    #Error checking takes place in an attempt to carry out the conversion
     try:
+        #the hex and int functions are used to convert the returned decValue
+        #If no error is caused the conversion is carried out and returned
         hexVal = hex(int(decValue))
         return hexVal
     except:
+        #Any errors are caught and returned to the output procedure
         return "Must enter a valid binary number i.e. only containint 1 or 0"
 
 
 
 def bin_dec():
+    #The entered number is retrieved and stored in a variable for use
     number = baseNumber.get()
+    #Error checking to stop the program crashing
     try:
+        #Attempt to convert the entered value into an int with base 2
+        #If no error is caused the value is returned
         value = int(number , 2)
         return value
     except:
+        #If an error occurs the error is caught and the appropriate message
+        #returned to the output function
         return "Must enter a valid binary number i.e. only containint 1 or 0"
 
 #Setting the tk environment to start the GUI
@@ -149,10 +164,6 @@ root = tk.Tk()
 '''I have set up different frames to allow for different grid layouts'''
 #Setting the title that will appear at the top of the window
 root.title("BinHexDec Calculator")
-
-
-
-
 #Creating a frame that will hold the top text of the window
 titleFrame = tk.Frame(root, width=400, height=50)
 titleFrame.pack()
