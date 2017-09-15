@@ -159,6 +159,10 @@ def bin_dec():
         #returned to the output function
         return "Must enter a valid binary number i.e. only containint 1 or 0"
 
+#Procedure to convert the text the user enters in the entry box to upper case
+def caps(event):
+    entryText.set(entryText.get().upper())
+
 #Setting the tk environment to start the GUI
 root = tk.Tk()
 '''I have set up different frames to allow for different grid layouts'''
@@ -178,8 +182,10 @@ buttonFrame.pack()
 title = tk.Label(titleFrame, text="BinHexDec Converter").pack()
 entryText = tk.Label(entryFrame, text="Enter the number to convert and select the conversion below").grid(row=0, columnspan=3)
 #Creatingan entry widget that will allow the user to enter a value
-baseNumber = tk.Entry(entryFrame)
+entryText = tk.StringVar()
+baseNumber = tk.Entry(entryFrame, textvariable=entryText)
 baseNumber.grid(row=1, column=1)
+baseNumber.bind("<KeyRelease>",caps)
 
 #Initialising a variable as a "string variable" this allows me
 #to change this value dynamically within the program
