@@ -13,7 +13,28 @@ To Do: Adapt the app so that there is a home screen, num converter screen and te
 # The "as tk" is a common approach to make calling methods faster
 import tkinter as tk
 
-def calculator ():
+
+def menu():
+    def menuChoice(choice):
+        if choice == 1:
+            calculator(menuWindow)
+        else:
+            quizMenu(menuWindow)
+
+    menuWindow = tk.Tk()
+    menuWindow.title("Main Menu")
+    heading = tk.Label(menuWindow,text="GUI Example")
+    heading.pack()
+
+    calcBtn = tk.Button(menuWindow, text = "Calculator", command = lambda: menuChoice(1))
+    calcBtn.pack()
+
+    quizBtn = tk.Button(menuWindow, text = "Quiz", command = lambda: menuChoice(2))
+    quizBtn.pack()
+
+    menuWindow.mainloop()
+
+def calculator (menuWindow):
     """This first section contains the functions
     that make the program convert the different number systems"""
 
@@ -92,7 +113,6 @@ def calculator ():
             return "Must only contain numbers and letters in the Hex set\n" \
                     "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f"
 
-
     def hex_dec():
         #Establish a dictionary to store the hex value of each position
         number = baseNumber.get()
@@ -103,7 +123,6 @@ def calculator ():
             value = "Must only contain numbers and letters in the Hex set\n" \
                     "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f"
             return value
-
 
     def dec_hex():
         #As before this is getting the entered value
@@ -136,7 +155,6 @@ def calculator ():
             number = "Must enter a valid digit"
         return number
 
-
     def bin_hex():
         #the bin_dec() function is called to obtain a decimal value for conversion
         decValue = bin_dec()
@@ -149,8 +167,6 @@ def calculator ():
         except:
             #Any errors are caught and returned to the output procedure
             return "Must enter a valid binary number i.e. only containint 1 or 0"
-
-
 
     def bin_dec():
         #The entered number is retrieved and stored in a variable for use
@@ -170,7 +186,13 @@ def calculator ():
     def caps(event):
         entryText.set(entryText.get().upper())
 
+    def close():
+
+        root.destroy()
+        menu()
+
     #Setting the tk environment to start the GUI
+    menuWindow.destroy()
     root = tk.Tk()
     '''I have set up different frames to allow for different grid layouts'''
     #Setting the title that will appear at the top of the window
@@ -185,6 +207,8 @@ def calculator ():
     resultFrame.pack()
     buttonFrame = tk.Frame(root, width=400, height=200)
     buttonFrame.pack()
+    menuFrame = tk.Frame(root, width=400, height=200)
+    menuFrame.pack()
     #Creating a label to display text on the screen
     title = tk.Label(titleFrame, text="BinHexDec Converter").pack()
     entryText = tk.Label(entryFrame, text="Enter the number to convert and select the conversion below").grid(row=0, columnspan=3)
@@ -211,7 +235,81 @@ def calculator ():
     decBinBtn = tk.Button(buttonFrame, text="Dec to Bin", command= lambda: outputUpdate(4)).grid(row=0,column=3)
     binDecBtn = tk.Button(buttonFrame, text="Bin to Dec", command= lambda: outputUpdate(5)).grid(row=1,column=1)
     binHexBtn = tk.Button(buttonFrame, text="Bin to Hex", command = lambda: outputUpdate(6)).grid(row=1,column=2)
+
+    closeBtn = tk.Button(menuFrame, text = "Return to Menu", command = close).grid(row=2,column=2)
     #This initialises the window and keeps it running constantly
     root.mainloop()
 
-calculator()
+def quizMenu(menuWindow):
+    def choice(option):
+        if option == 1:
+            login(quizWindow)
+        elif option == 2:
+            registration(quizWindow)
+        else:
+            menuWindow.destroy()
+            menu()
+
+    menuWindow.destroy()
+    quizWindow = tk.Tk()
+    quizWindow.title = "Quiz Menu"
+
+    logIn = tk.Button(quizWindow, text = "Log In", command = lambda: choice(1))
+    logIn.pack()
+
+    register = tk.Button(quizWindow, text = "Register", command = lambda: choice(2))
+    register.pack()
+
+    menu = tk.Button(quizWindow, text="Register", command=lambda: choice(3))
+    menu.pack()
+
+    quizWindow.mainloop()
+
+def login(quizWindow):
+    def logInCheck(correctUsername, correctPassword):
+        username = usernameEntry.get()
+        password = passwordEntry.get()
+        if username == correctUsername and password == correctPassword:
+            runQuiz(loginWindow,username)
+        else:
+            print("ERROR")
+    correctUsername = "Test"
+    correctPassword = "Test"
+
+    quizWindow.destroy()
+    loginWindow = tk.Tk()
+    loginWindow.title = "Login"
+
+    tk.Label(loginWindow, text = "Username").grid(row=1, column=0)
+    usernameEntry = tk.Entry(loginWindow)
+    usernameEntry.grid(row = 1, column = 2)
+    usernameEntry.bind("<KeyRelease>")
+    tk.Label (loginWindow,text = "Password").grid(row=2, column=0)
+    passwordEntry = tk.Entry(loginWindow)
+    passwordEntry.grid(row = 2, column = 2)
+    passwordEntry.bind("<KeyRelease>")
+
+    tk.Button(loginWindow, text="Login", command = lambda: logInCheck(correctUsername, correctPassword)).grid(row = 3, column = 0)
+
+    loginWindow.mainloop()
+
+def registration(quizWindow):
+    pass
+def runQuiz(closeWindow, username):
+    global score
+    pass
+    def importQuestions():
+        return None
+
+    def answerCheck(answer, correctAnswer):
+        global score
+        pass
+
+    closeWindow.destroy()
+    runWindow = tk.Tk()
+    questions = importQuestions
+
+    runWindow.mainloop()
+global score
+score = 0
+menu()
